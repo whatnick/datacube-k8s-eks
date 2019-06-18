@@ -44,12 +44,14 @@ resource "aws_autoscaling_group" "nodes" {
 }
 
 resource "aws_autoscaling_group" "spot_nodes" {
-  count            = (var.spot_nodes_enabled ? 1 : 0) * length(var.nodes_subnet_group)
-  desired_capacity = var.desired_nodes
-  max_size         = var.max_nodes
-  min_size         = var.min_nodes
-  name             = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-spot-${count.index}"
-  vpc_zone_identifier = [element(var.nodes_subnet_group, count.index)]
+  count                     = (var.spot_nodes_enabled ? 1 : 0) * length(var.nodes_subnet_group)
+  desired_capacity          = var.desired_nodes
+  max_size                  = var.max_nodes
+  min_size                  = var.min_nodes
+  name                      = "${var.node_group_name}-${aws_launch_template.spot[count.index].id}-spot-${count.index}"
+  vpc_zone_identifier       = [element(var.nodes_subnet_group, count.index)]
+  # Spot nodes may not be available, do not wait
+  wait_for_capacity_timeout = "0"
 
   # Don't reset to default size every time terraform is applied
   lifecycle {
@@ -57,9 +59,20 @@ resource "aws_autoscaling_group" "spot_nodes" {
     create_before_destroy = true
   }
 
-  launch_template {
-    id      = element(aws_launch_template.spot.*.id, count.index)
-    version = element(aws_launch_template.spot.*.latest_version, count.index)
+  mixed_instances_policy {
+    launch_template {
+      launch_template_specification {
+        launch_template_id = element(aws_launch_template.spot.*.id, count.index)
+        version            = element(aws_launch_template.spot.*.latest_version, count.index)
+      }
+      dynamic "override" {
+        for_each = var.additional_spot_worker_instance_types
+
+        content {
+          instance_type = override.value
+        }
+      }
+    }
   }
 
   tags = [

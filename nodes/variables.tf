@@ -12,6 +12,12 @@ variable "node_group_name" {
 variable "default_worker_instance_type" {
 }
 
+variable "additional_spot_worker_instance_types" {
+  type = "list"
+  default = []
+  description = "If desired, specify additional EC2 instance types which will be used in the spot worker ASGs"
+}
+
 variable "group_enabled" {
   default = false
 }
