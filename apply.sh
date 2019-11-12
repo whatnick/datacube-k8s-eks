@@ -27,7 +27,6 @@ if [ ! -z "$CLEAN" ]; then
     rm -rf .terraform
 fi
 aws configure list
-terraform 0.12upgrade
 terraform init -backend-config $WORKSPACESPATH/$WORKSPACE/backend.cfg
 terraform plan -out infra.plan -input=false -var-file="$WORKSPACESPATH/$WORKSPACE/terraform.tfvars"
 #terraform apply -auto-approve infra.plan
