@@ -15,7 +15,7 @@ export WORKSPACE=$1
 export WORKSPACESPATH=$2
 
 # Enable Terraform logging
-export TF_LOG=TRACE
+export TF_LOG=DEBUG
 
 if [[ "$3" = "clean" ]]; then
     CLEAN="true"
