@@ -24,7 +24,7 @@ provider "helm" {
 }
 
 provider "kubernetes" {
-  version = "~> 1.7"
+  version = "1.9"
   config_context_cluster = data.aws_eks_cluster.eks.arn
 }
 
