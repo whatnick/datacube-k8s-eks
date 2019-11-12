@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.12.0"
+  required_version = ">= 0.12.3"
 
   backend "s3" {
     # Force encryption
