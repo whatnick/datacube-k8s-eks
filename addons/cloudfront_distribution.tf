@@ -77,6 +77,7 @@ variable "cf_price_class" {
 
 # Create a new certificate, this must be in us-east-1 to work with cloudfront
 provider "aws" {
+  version = "~> 2.34"
   region = "us-east-1"
   alias  = "us"
 }
