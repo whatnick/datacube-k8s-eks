@@ -21,6 +21,7 @@ for a in $(ls examples/stage);
         terraform init;
         tflint --module main.tf; 
         mv main.tf.bck main.tf;
+        rm -rf .terraform;
         terraform init -backend=false;
         terraform validate; test_result=$?
         if (($test_result != 0)); then
