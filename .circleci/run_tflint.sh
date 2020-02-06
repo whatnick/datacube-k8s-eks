@@ -19,6 +19,7 @@ for a in $(ls examples/stage);
         cp main.tf main.tf.bck;
         cp ../../../.circleci/sample/main.tf.sample main.tf;
         terraform init;
+        terraform validate;
         tflint --module main.tf;
         mv main.tf.bck main.tf;
         cd ../../../;
