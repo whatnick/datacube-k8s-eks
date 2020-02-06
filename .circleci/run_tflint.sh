@@ -21,6 +21,11 @@ for a in $(ls examples/stage);
         terraform init;
         tflint --module main.tf; 
         mv main.tf.bck main.tf;
-        terraform validate -backend=false;
+        terraform init -backend=false;
+        terraform validate; test_result=$?
+        if ((test_result != 0)); then
+            printf '%s\n' "Terraform Validate Failed" >&2  # write error message to stderr
+            exit $test_result                              # or exit $test_result
+        fi
         cd ../../../;
     done;
