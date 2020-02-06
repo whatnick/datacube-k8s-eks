@@ -23,7 +23,7 @@ for a in $(ls examples/stage);
         mv main.tf.bck main.tf;
         terraform init -backend=false;
         terraform validate; test_result=$?
-        if ((test_result != 0)); then
+        if (($test_result != 0)); then
             printf '%s\n' "Terraform Validate Failed" >&2  # write error message to stderr
             exit $test_result                              # or exit $test_result
         fi
